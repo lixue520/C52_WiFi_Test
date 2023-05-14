@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\esp8266.obj",
+".\Objects\usart.obj",
+".\Objects\delay.obj",
+".\Objects\Lcd.obj" 
+TO ".\Objects\Aliyun_C51" 
+PRINT(".\Listings\Aliyun_C51.m51") RAMSIZE(256) 
+CODE( 0X0000-0X1FFF )

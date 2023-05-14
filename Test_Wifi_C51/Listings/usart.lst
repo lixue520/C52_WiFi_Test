@@ -1,0 +1,54 @@
+C51 COMPILER V9.54   USART                                                                 04/10/2023 06:32:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE USART
+OBJECT MODULE PLACED IN .\Objects\usart.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE system\usart.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\system;.\show) DEBUG OB
+                    -JECTEXTEND PRINT(.\Listings\usart.lst) OBJECT(.\Objects\usart.obj)
+
+line level    source
+
+   1          #include "usart.h"
+   2          #include <intrins.h>
+   3          #include <string.h>
+   4          void UartInit(void)
+   5          {
+   6   1              SCON = 0x50;//数据位8位，停止位1位，起始位1位怎么配！都要根据芯片手册来写 ,使能接收
+   7   1              
+   8   1              T2CON |= 0x1<<4 | 0x1<<5;  //TCLK = 1(TranmitCLock)   RCLK = 1
+   9   1              TH2 = 0xFF;
+  10   1              TL2 = 0xFD; 
+  11   1              RCAP2H = 0xFF; //RCAP2*的值为TH*重载
+  12   1              RCAP2L = 0xFD;
+  13   1      
+  14   1              TR2 = 1; //启动定时器
+  15   1      
+  16   1      
+  17   1              EA = 1;
+  18   1              ES = 1;
+  19   1      
+  20   1      }
+  21          
+  22          void send_str(char *str)
+  23          {
+  24   1          while(*str) {
+  25   2              SBUF = *str++;
+  26   2              while(!TI);
+  27   2              TI = 0;
+  28   2          }
+  29   1      }
+  30          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     65    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,63 @@
+#include "Ultrasonic.h"
+#include "usart.h"
+#include "delay.h"
+void Ultrasonic_Config(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//Trig
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;//Echo
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+	Timer2_Config();
+}
+
+void Timer2_Config(void)
+{
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,   ENABLE);
+
+    TIM_TimeBaseInitStructure.TIM_Prescaler = 71;
+    TIM_TimeBaseInitStructure.TIM_Period = 49999;
+    TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
+
+    TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+}
+
+u32 Distance_Calculate(u32 count)
+{
+    u32 Distance = 0;
+    Distance = (u32)(((float)count / 58) * 100);
+    return Distance;
+}
+
+
+void check_person(){
+		u32 count = 0;
+		u32 Distance = 0;
+		GPIO_ResetBits(GPIOB, GPIO_Pin_10);//预先拉低Trig引脚
+        GPIO_SetBits(GPIOB, GPIO_Pin_10);
+        delay_us(10);
+        GPIO_ResetBits(GPIOB, GPIO_Pin_10);//发出10us的脉冲
+        TIM2->CNT = 0;
+        while(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) == 0);
+        TIM_Cmd(TIM2, ENABLE);
+        while(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) == 1);
+        TIM_Cmd(TIM2, DISABLE);
+        count = TIM2->CNT;
+        Distance = Distance_Calculate(count);
+        DEBUG_LOG("Distance = %d.%d cm", Distance / 100,Distance % 100);
+        delay_ms(500);
+}

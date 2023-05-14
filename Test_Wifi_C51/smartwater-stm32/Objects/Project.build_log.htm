@@ -1,0 +1,178 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.28.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: A qin, A, LIC=21E4T-RND3V-Y80FK-Z8JDT-R17VS-QKPY6
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.28.0.0
+Toolchain Path:  D:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.28.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
+Dialog DLL:      TCM.DLL V1.36.2.0
+ 
+<h2>Project:</h2>
+C:\Users\qin\Desktop\bscode\Test_Wifi_C51\smartwater-stm32\Project.uvprojx
+Project File Date:  04/27/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
+Rebuild target 'Target 1'
+assembling startup_stm32f10x_md.s...
+compiling core_cm3.c...
+compiling misc.c...
+compiling system_stm32f10x.c...
+compiling stm32f10x_can.c...
+compiling stm32f10x_bkp.c...
+compiling stm32f10x_adc.c...
+compiling stm32f10x_cec.c...
+compiling stm32f10x_crc.c...
+compiling stm32f10x_dma.c...
+compiling stm32f10x_dbgmcu.c...
+compiling stm32f10x_flash.c...
+compiling stm32f10x_exti.c...
+compiling stm32f10x_dac.c...
+compiling stm32f10x_fsmc.c...
+compiling stm32f10x_gpio.c...
+compiling stm32f10x_pwr.c...
+compiling stm32f10x_rtc.c...
+compiling stm32f10x_i2c.c...
+compiling stm32f10x_iwdg.c...
+compiling stm32f10x_rcc.c...
+compiling stm32f10x_sdio.c...
+compiling stm32f10x_spi.c...
+compiling stm32f10x_wwdg.c...
+compiling stm32f10x_usart.c...
+compiling delay.c...
+compiling stm32f10x_tim.c...
+compiling sys.c...
+compiling usart.c...
+compiling adc.c...
+compiling exti.c...
+compiling beep.c...
+compiling timer.c...
+compiling main.c...
+.\Hardware\water\water.h(14): warning:  #1295-D: Deprecated declaration Get_ADCValue_Height_PB1 - give arg types
+  u16  Get_ADCValue_Height_PB1();//锟斤拷取水位
+.\Hardware\water\water.h(23): warning:  #1295-D: Deprecated declaration Get_Rate_Of_Flow_1 - give arg types
+  float Get_Rate_Of_Flow_1();
+.\Hardware\water\water.h(24): warning:  #1295-D: Deprecated declaration Get_Rate_Of_Flow_2 - give arg types
+  float Get_Rate_Of_Flow_2();
+.\Hardware\water\water.h(25): warning:  #1295-D: Deprecated declaration Water_Height_PA4 - give arg types
+  float  Water_Height_PA4();
+.\Hardware\water\water.h(26): warning:  #1295-D: Deprecated declaration Water_Height2 - give arg types
+  u8  Water_Height2() ;
+User\main.c(72): warning:  #177-D: variable "timeCount"  was declared but never referenced
+      unsigned short timeCount = 0;	//发送间隔变量
+User\main.c(73): warning:  #177-D: variable "dataPtr"  was declared but never referenced
+      unsigned char *dataPtr = NULL;  //接收平台数据
+User\main.c(74): warning:  #177-D: variable "lineNow"  was declared but never referenced
+      static u8 lineNow;
+User\main.c(75): warning:  #177-D: variable "status"  was declared but never referenced
+      unsigned char status;
+User\main.c(76): warning:  #177-D: variable "s"  was declared but never referenced
+      unsigned char s=0x08;
+User\main.c: 10 warnings, 0 errors
+compiling stm32f10x_it.c...
+compiling key.c...
+compiling led.c...
+compiling waterflow.c...
+Hardware\waterflow\waterflow.c(70): warning:  #69-D: integer conversion resulted in truncation
+      TIM_TimeBaseStructure.TIM_Period = 0xFFFFFFFF; // 鏈�澶ц鏁板�?
+Hardware\waterflow\waterflow.c: 1 warning, 0 errors
+compiling pump.c...
+Hardware\Pump\pump.c(62): warning:  #1-D: last line of file ends without a newline
+  }
+Hardware\Pump\pump.c: 1 warning, 0 errors
+compiling Ultrasonic.c...
+Hardware\csb\Ultrasonic.c(63): warning:  #1-D: last line of file ends without a newline
+  }
+Hardware\csb\Ultrasonic.c: 1 warning, 0 errors
+compiling water.c...
+Hardware\water\water.h(14): warning:  #1295-D: Deprecated declaration Get_ADCValue_Height_PB1 - give arg types
+  u16  Get_ADCValue_Height_PB1();//锟斤拷取水位
+Hardware\water\water.h(23): warning:  #1295-D: Deprecated declaration Get_Rate_Of_Flow_1 - give arg types
+  float Get_Rate_Of_Flow_1();
+Hardware\water\water.h(24): warning:  #1295-D: Deprecated declaration Get_Rate_Of_Flow_2 - give arg types
+  float Get_Rate_Of_Flow_2();
+Hardware\water\water.h(25): warning:  #1295-D: Deprecated declaration Water_Height_PA4 - give arg types
+  float  Water_Height_PA4();
+Hardware\water\water.h(26): warning:  #1295-D: Deprecated declaration Water_Height2 - give arg types
+  u8  Water_Height2() ;
+Hardware\water\water.c(164): warning:  #177-D: variable "DC"  was declared but never referenced
+      float adc_value,DC,data,voltage,flow_rate ;
+Hardware\water\water.c(164): warning:  #177-D: variable "data"  was declared but never referenced
+      float adc_value,DC,data,voltage,flow_rate ;
+Hardware\water\water.c(183): warning:  #550-D: variable "DC"  was set but never used
+      float temp1,DC;
+Hardware\water\water.c(194): warning:  #177-D: variable "K"  was declared but never referenced
+      float temp1,K,DC,Height;
+Hardware\water\water.c(194): warning:  #177-D: variable "DC"  was declared but never referenced
+      float temp1,K,DC,Height;
+Hardware\water\water.c(208): warning:  #550-D: variable "DC"  was set but never used
+      float temp1,K,DC,Height;
+Hardware\water\water.c(208): warning:  #550-D: variable "Height"  was set but never used
+      float temp1,K,DC,Height;
+Hardware\water\water.c(234): warning:  #177-D: variable "DC"  was declared but never referenced
+      float temp,DC,tds;
+Hardware\water\water.c(234): warning:  #177-D: variable "tds"  was declared but never referenced
+      float temp,DC,tds;
+Hardware\water\water.c(257): warning:  #177-D: variable "tds"  was declared but never referenced
+  	float temp,DC,tds,PH_Value;
+Hardware\water\water.c(273): warning:  #177-D: variable "K"  was declared but never referenced
+     float temp1,K,DC,Height;
+Hardware\water\water.c(273): warning:  #177-D: variable "DC"  was declared but never referenced
+     float temp1,K,DC,Height;
+Hardware\water\water.c: 17 warnings, 0 errors
+compiling water_out.c...
+Hardware\water_out\water_out.c(36): warning:  #1-D: last line of file ends without a newline
+  	
+Hardware\water_out\water_out.c: 1 warning, 0 errors
+compiling ds18b20.c...
+compiling spi.c...
+compiling pay.c...
+compiling MqttKit.c...
+compiling rc522.c...
+compiling cJSON.c...
+Net\cJSON\cJSON.c(55): warning:  #1293-D: assignment in condition
+        if (!(copy = (char*)cJSON_malloc(len))) return 0;
+Net\cJSON\cJSON.c(278): warning:  #1293-D: assignment in condition
+  	ptr=str;while ((token=*ptr) && ++len) {if (strchr("\"\\\b\f\n\r\t",token)) len++; else if (token<32) len+=5;ptr++;}
+Net\cJSON\cJSON.c(352): warning:  #111-D: statement is unreachable
+  	return p.buffer;
+Net\cJSON\cJSON.c(423): warning:  #1293-D: assignment in condition
+  		if (!(new_item=cJSON_New_Item())) return 0; 	/* memory fail */
+Net\cJSON\cJSON.c(535): warning:  #1293-D: assignment in condition
+  		if (!(new_item=cJSON_New_Item()))	return 0; /* memory fail */
+Net\cJSON\cJSON.c: 5 warnings, 0 errors
+compiling esp8266.c...
+compiling onenet.c...
+linking...
+Program Size: Code=13564 RO-data=300 RW-data=288 ZI-data=2264  
+".\Objects\Project.axf" - 0 Error(s), 36 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F1xx_DFP.1.0.5.pack
+                Keil.STM32F1xx_DFP.1.0.5
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_Target_1
+  C:\Users\qin\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.0.5\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:23
+</pre>
+</body>
+</html>

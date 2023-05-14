@@ -1,0 +1,116 @@
+C51 COMPILER V9.54   LCD                                                                   04/10/2023 06:32:31 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\Lcd.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE show\Lcd.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\system;.\show) DEBUG OBJECT
+                    -EXTEND PRINT(.\Listings\Lcd.lst) OBJECT(.\Objects\Lcd.obj)
+
+line level    source
+
+   1          #include "Lcd.h"
+   2          
+   3          //操作实例：在主函数上写入即可显示
+   4          //LCD_Initial();
+   5          //GotoXY(0,0);
+   6          //Print("1900800724qzw");
+   7          //GotoXY(1,0);
+   8          //Print("st=   ");
+   9          //GotoXY(1,8);
+  10          //Print("sp=   ");
+  11          //y=set;
+  12          
+  13          //GotoXY(1,3);
+  14          //PutCh(y/1000+'0');
+  15          //PutCh((y/100)%10+'0');
+  16          //PutCh((y/10)%10+'0');
+  17          //PutCh(y%10+'0');
+  18          //y=y*500;
+  19          
+  20          //m=pos;
+  21          
+  22          //GotoXY(1,10);
+  23          //PutCh(m/1000+'0');
+  24          //PutCh((m/100)%10+'0');
+  25          //PutCh((m/10)%10+'0');
+  26          //PutCh(m%10+'0');
+  27          
+  28          
+  29          
+  30          
+  31          
+  32          
+  33          
+  34          
+  35          
+  36          void delay(uint t)
+  37          {
+  38   1          while(t--);
+  39   1      }
+  40          
+  41          
+  42          void time(unsigned int t)
+  43          {
+  44   1          unsigned int i;
+  45   1          for(i=0; i<t; i++);
+  46   1      }
+  47          
+  48          
+  49          void LCD_WRITE(unsigned char x,bit WS)
+  50          {
+  51   1          P2=x;
+  52   1          LcdRW=0;
+  53   1          LcdRS=WS;
+  54   1          LcdEN=1;
+C51 COMPILER V9.54   LCD                                                                   04/10/2023 06:32:31 PAGE 2   
+
+  55   1          time(50);
+  56   1          LcdEN=0;
+  57   1      }
+  58          
+  59          void LCD_Initial()
+  60          {
+  61   1          LCD_WRITE(0x38,LCD_COM);
+  62   1          time(120);
+  63   1          LCD_WRITE(0x38,LCD_COM);
+  64   1          time(120);
+  65   1          LCD_WRITE(0x01,LCD_COM);
+  66   1          time(120);
+  67   1          LCD_WRITE(0x06,LCD_COM);
+  68   1          time(120);
+  69   1          LCD_WRITE(0x0c,LCD_COM);
+  70   1          time(120);
+  71   1      }
+  72          
+  73          
+  74          void GotoXY(unsigned char x,unsigned char y)
+  75          {
+  76   1          unsigned char code table[4]= {0x00,0x40,0x10,0x50};
+  77   1          LCD_WRITE(0x80+table[x]+y, LCD_COM);
+  78   1      }
+  79          void PutCh(char m)
+  80          {
+  81   1          LCD_WRITE(m,LCD_DAT);
+  82   1      }
+  83          void Print(unsigned char *str)
+  84          {
+  85   1          while(*str!='\0')
+  86   1          {
+  87   2              PutCh(*str);
+  88   2              str++;
+  89   2          }
+  90   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    145    ----
+   CONSTANT SIZE    =      4    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

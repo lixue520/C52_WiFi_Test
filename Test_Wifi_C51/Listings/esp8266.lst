@@ -1,0 +1,90 @@
+C51 COMPILER V9.54   ESP8266                                                               04/10/2023 06:32:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ESP8266
+OBJECT MODULE PLACED IN .\Objects\esp8266.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE wifi\esp8266.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\system;.\show) DEBUG OB
+                    -JECTEXTEND PRINT(.\Listings\esp8266.lst) OBJECT(.\Objects\esp8266.obj)
+
+line level    source
+
+   1          //#include "reg52.h"
+   2          
+   3          //sbit led1 = P1^0;
+   4          
+   5          //void UartInit(void)
+   6          //{
+   7          //    SCON = 0x50;
+   8          //    TMOD &= 0x0F;
+   9          //    TMOD |= 0x20;
+  10          //    TH1 = 0xFD;
+  11          //    TL1 = 0xFD;
+  12          //    TR1 = 1;
+  13          //    ES = 1;
+  14          //    EA = 1;
+  15          //}
+  16          
+  17          //void send_str(char *str)
+  18          //{
+  19          //    while(*str){
+  20          //        SBUF = *str++;
+  21          //        while(!TI);
+  22          //        TI = 0;
+  23          //    }
+  24          //}
+  25          
+  26          //void Uart_server() interrupt 4
+  27          //{
+  28          //    if(RI){
+  29          //        RI = 0;
+  30          //        if(SBUF == 'o'){
+  31          //            while(!RI);
+  32          //            RI = 0;
+  33          //            if(SBUF == 'p'){
+  34          //                led1 = 0;
+  35          //                send_str("open_ok");
+  36          //            }
+  37          //        } else if(SBUF == 'c'){
+  38          //            while(!RI);
+  39          //            RI = 0;
+  40          //            if(SBUF == 'l'){
+  41          //                while(!RI);
+  42          //                RI = 0;
+  43          //                if(SBUF == 'o'){
+  44          //                    while(!RI);
+  45          //                    RI = 0;
+  46          //                    if(SBUF == 's'){
+  47          //                        while(!RI);
+  48          //                        RI = 0;
+  49          //                        if(SBUF == 'e'){
+  50          //                            led1 = 1;
+  51          //                            send_str("close_ok");
+  52          //                        }
+  53          //                    }
+  54          //                }
+C51 COMPILER V9.54   ESP8266                                                               04/10/2023 06:32:30 PAGE 2   
+
+  55          //            }
+  56          //        }
+  57          //    }
+  58          //}
+  59          
+  60          //void main()
+  61          //{
+  62          //    UartInit();
+  63          //    while(1);
+  64          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

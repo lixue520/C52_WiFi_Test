@@ -1,0 +1,55 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.28.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: qin qin, qin, LIC=32KYW-QJQJH-XHY8J-U9Z3V-QG69W-CN726
+ 
+Tool Versions:
+Toolchain:       PK51 Prof. Developers Kit  Version: 9.54
+Toolchain Path:  D:\Keil_v5\C51\BIN
+C Compiler:      C51.exe V9.54
+Assembler:       A51.exe V8.02c
+Linker/Locator:  BL51.exe V6.22
+Library Manager: LIB51.exe V4.30.1.0
+Hex Converter:   OH51.exe V2.7.0.0
+CPU DLL:         S8051.DLL V3.100.0.0
+Dialog DLL:      DP51.DLL V2.62.0.1 
+<h2>Project:</h2>
+C:\Users\qin\Desktop\bscode\Test_Wifi_C51\Aliyun_C51.uvproj
+Project File Date:  04/10/2023
+
+<h2>Output:</h2>
+Rebuild target 'Target 1'
+compiling main.c...
+src\main.c(72): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling esp8266.c...
+compiling usart.c...
+compiling delay.c...
+compiling Lcd.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_STR?USART
+    CALLER1: ?PR?TIMER0_ISR?MAIN
+    CALLER2: ?PR?TIMER1_ISR?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_STR?USART
+    CALLER1: ?PR?TIMER1_ISR?MAIN
+    CALLER2: ?PR?BUTTON_ISR?MAIN
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SEND_STR?USART
+    CALLER1: ?PR?BUTTON_ISR?MAIN
+    CALLER2: ?PR?UART_SERVER?MAIN
+Program Size: data=31.1 xdata=0 code=1150
+creating hex file from ".\Objects\Aliyun_C51"...
+".\Objects\Aliyun_C51" - 0 Error(s), 6 Warning(s).
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>

@@ -1,0 +1,193 @@
+C51 COMPILER V9.54   MAIN                                                                  04/10/2023 06:32:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\system;.\show) DEBUG OBJECT
+                    -EXTEND PRINT(.\Listings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "usart.h"
+   3          #include "delay.h"
+   4          #include "Lcd.h"
+   5          typedef unsigned int u16;        //对数据类型进行声明定义
+   6          typedef unsigned char u8;
+   7          // 声明计数器变量，并初始化为0
+   8          unsigned int counter = 0;
+   9          sbit led1 = P1^0;
+  10          sbit pulse_out = P3^3; // 输出脉冲引脚 P3.3
+  11          sbit pulse_in = P3^5;  //T1计数
+  12          sbit COUNT=P1^4; //定期1 计数模式当FZ反转10次触发一次反转，有示波器显示
+  13          sbit FZ = P1^2; //定时0  1s反转，信号发生后作为pulse_in信号的输入
+  14          static unsigned int cnt = 0; // 定义计数器变量
+  15          static unsigned char count = 0; //定义一个静态变量，用于记录计数次数
+  16          static u16 i;
+  17          char* timer0_int_1s="timer_0_interrupt_1s\r\n";
+  18          
+  19          // 定时器0初始化，计数器模式，不分频
+  20          
+  21          //计数时间 = (TH0 × 256 + TL0) × 12 / 11.0592 MHz
+  22          
+  23          //将代码中的数据代入计算公式中：
+  24          
+  25          //计数时间 = (0xFC × 256 + 0x18) × 12 / 11.0592 MHz ≈ 1ms
+  26          void timer0_init(void)
+  27          {
+  28   1          TMOD|=0X01;              //选择为定时器0模式，工作方式1（16位），仅用TR0打开启动
+  29   1          TH0=0XFC;                //给定时器赋初值，定时1ms  高8位
+  30   1          TL0=0X18;                //                       低8位（可用软件计算，公司参考上面）
+  31   1          ET0=1;                   //允许定时器0中断
+  32   1          EA=1;                    //打开总中断
+  33   1          TR0=1;                   //打开定时器0，启动T/C0运行
+  34   1      
+  35   1      }
+  36          // 定时器1初始化，计数模式，10次就中断
+  37          void timer1_init(void)
+  38          {
+  39   1              TMOD &= 0x0F;  // 清除T1控制位
+  40   1          TMOD |= 0x10;  // 配置T1工作模式为模式1
+  41   1          TH1 = 0xFD;    // 计数初始值，定时5ms
+  42   1          TL1 = 0xFD;
+  43   1          TR1 = 1;       // 启动T1计数器
+  44   1          ET1 = 1;       // 开启T1中断
+  45   1          EA = 1;        // 开启中断总开关
+  46   1      }
+  47          void main()
+  48          {   IT1 = 1; // P3.5外部中断1下降沿触发
+  49   1          EX1 = 1; // 允许P3.5外部中断1
+  50   1          UartInit();
+  51   1          timer0_init(); // 初始化定时器0
+  52   1          timer1_init(); // 初始化定时器1
+  53   1          FZ=0;
+  54   1              COUNT=0;
+C51 COMPILER V9.54   MAIN                                                                  04/10/2023 06:32:30 PAGE 2   
+
+  55   1              LCD_Initial();
+  56   1              GotoXY(0,0);
+  57   1              Print("ds=   ");
+  58   1              GotoXY(1,0);
+  59   1              Print("js=   ");
+  60   1              GotoXY(1,8);
+  61   1              Print("fs=   ");
+  62   1              
+  63   1      
+  64   1              
+  65   1      
+  66   1          while(1) {
+  67   2                      GotoXY(0,3);
+  68   2                      PutCh(i);
+  69   2                      GotoXY(1,3);
+  70   2                      PutCh(count);
+  71   2                      GotoXY(1,8);
+  72   2                      PutCh(timer0_int_1s);
+*** WARNING C214 IN LINE 72 OF src\main.c: 'Argument': conversion: pointer to non-pointer
+  73   2                      
+  74   2          }
+  75   1      }
+  76          
+  77          
+  78          // 定时器0中断服务函数
+  79          void timer0_isr() interrupt 1
+  80          {
+  81   1          TH0=0XFC;               //计数器寄存高8位重新载入
+  82   1          TL0=0X18;               //计数器寄存低8位重新载入
+  83   1          i++;
+  84   1          if(i==1000) { //1s变一次
+  85   2                       send_str(timer0_int_1s);
+  86   2              if(FZ==1) {
+  87   3                  FZ=0;
+  88   3              } else {
+  89   3                  FZ=1;
+  90   3              }
+  91   2          }
+  92   1          if(i==2000)//1ms*1000=2s,别太快，否则串口打不出来
+  93   1          {
+  94   2              i=0;
+  95   2              send_str("timer_0_interrupt_2s\r\n");
+  96   2          }
+  97   1      
+  98   1      }
+  99          
+ 100          // 定时器1中断服务函数
+ 101          void timer1_isr() interrupt 3
+ 102          {
+ 103   1              
+ 104   1              if(!pulse_in){//低电平开始计数
+ 105   2                      count++; //每次中断，计数加1
+ 106   2                      if(count == 10) //如果计数达到10
+ 107   2                      {
+ 108   3                              count = 0; //清零计数变量
+ 109   3                              COUNT=~COUNT;
+ 110   3                              send_str("timer_interrupt_count_10\r\n"); // 通过串口输出计数值
+ 111   3                      }
+ 112   2              }
+ 113   1      }
+ 114          
+ 115          
+C51 COMPILER V9.54   MAIN                                                                  04/10/2023 06:32:30 PAGE 3   
+
+ 116          void button_isr(void) interrupt 2
+ 117          {
+ 118   1          //delay_ms(200); // 延时消抖
+ 119   1          if(FZ == 0) // 检测是否按下按钮
+ 120   1          {
+ 121   2              cnt++; // 按钮计数器加1
+ 122   2              if(cnt == 10) // 当计数值达到10时
+ 123   2              {
+ 124   3                  cnt = 0; // 重新计数
+ 125   3                  send_str("ext_interrupt_count_10\r\n"); // 通过串口输出计数值
+ 126   3              }
+ 127   2          }
+ 128   1      }
+ 129          
+ 130          
+ 131          
+ 132          void Uart_server() interrupt 4
+ 133          {
+ 134   1          if(RI) {
+ 135   2              RI = 0;
+ 136   2              if(SBUF == 'o') {
+ 137   3                  while(!RI);
+ 138   3                  RI = 0;
+ 139   3                  if(SBUF == 'p') {
+ 140   4                      led1 = 0;
+ 141   4                      send_str("open_ok\r\n");
+ 142   4                  }
+ 143   3              } else if(SBUF == 'c') {
+ 144   3                  while(!RI);
+ 145   3                  RI = 0;
+ 146   3                  if(SBUF == 'l') {
+ 147   4                      while(!RI);
+ 148   4                      RI = 0;
+ 149   4                      if(SBUF == 'o') {
+ 150   5                          while(!RI);
+ 151   5                          RI = 0;
+ 152   5                          if(SBUF == 's') {
+ 153   6                              while(!RI);
+ 154   6                              RI = 0;
+ 155   6                              if(SBUF == 'e') {
+ 156   7                                  led1 = 1;
+ 157   7                                  send_str("close_ok\r\n");
+ 158   7                              }
+ 159   6                          }
+ 160   5                      }
+ 161   4                  }
+ 162   3              }
+ 163   2          }
+ 164   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    573    ----
+   CONSTANT SIZE    =    140    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

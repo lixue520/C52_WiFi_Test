@@ -1,0 +1,146 @@
+#include "reg52.h"
+#include "usart.h"
+#include "delay.h"
+typedef unsigned int u16;	 //对数据类型进行声明定义
+typedef unsigned char u8;
+// 声明计数器变量，并初始化为0
+unsigned int counter = 0;
+sbit led1 = P1^0;
+sbit pulse_out = P3^3; // 输出脉冲引脚 P3.3
+sbit pulse_in = P3^5;  //T1计数
+sbit COUNT=P1^4; //定期1 计数模式当FZ反转10次触发一次反转，有示波器显示
+sbit FZ = P1^2; //定时0  1s反转，信号发生后作为pulse_in信号的输入
+static unsigned int cnt = 0; // 定义计数器变量
+// 定时器0初始化，计数器模式，不分频
+
+//计数时间 = (TH0 × 256 + TL0) × 12 / 11.0592 MHz
+
+//将代码中的数据代入计算公式中：
+
+//计数时间 = (0xFC × 256 + 0x18) × 12 / 11.0592 MHz ≈ 1ms
+void timer0_init(void)
+{
+    TMOD|=0X01;              //选择为定时器0模式，工作方式1（16位），仅用TR0打开启动
+    TH0=0XFC;	             //给定时器赋初值，定时1ms  高8位
+    TL0=0X18;                //                       低8位（可用软件计算，公司参考上面）
+    ET0=1;                   //允许定时器0中断
+    EA=1;                    //打开总中断
+    TR0=1;                   //打开定时器0，启动T/C0运行
+
+}
+// 定时器1初始化，计数模式，10次就中断
+void timer1_init(void)
+{
+TMOD &= 0x0F;  // 清除T1控制位
+    TMOD |= 0x10;  // 配置T1工作模式为模式1
+    TH1 = 0xFD;    // 计数初始值，定时5ms
+    TL1 = 0xFD;
+    TR1 = 1;       // 启动T1计数器
+    ET1 = 1;       // 开启T1中断
+    EA = 1;        // 开启中断总开关
+}
+void main()
+{   IT1 = 1; // P3.5外部中断1下降沿触发
+    EX1 = 1; // 允许P3.5外部中断1
+    UartInit();
+    timer0_init(); // 初始化定时器0
+    timer1_init(); // 初始化定时器1
+    FZ=0;
+	COUNT=0;
+
+    while(1) {
+
+    }
+}
+
+
+// 定时器0中断服务函数
+void timer0_isr() interrupt 1
+{
+    static u16 i;
+    TH0=0XFC;	            //计数器寄存高8位重新载入
+    TL0=0X18;               //计数器寄存低8位重新载入
+    i++;
+    if(i==1000) { //1s变一次
+		 send_str("timer_0_interrupt_1s\r\n");
+        if(FZ==1) {
+            FZ=0;
+        } else {
+            FZ=1;
+        }
+    }
+    if(i==2000)//1ms*1000=2s,别太快，否则串口打不出来
+    {
+        i=0;
+        send_str("timer_0_interrupt_2s\r\n");
+    }
+
+}
+
+// 定时器1中断服务函数
+void timer1_isr() interrupt 3
+{
+	
+	 static unsigned char count = 0; //定义一个静态变量，用于记录计数次数
+	if(pulse_in){
+    count++; //每次中断，计数加1
+    if(count == 10) //如果计数达到10
+    {
+        count = 0; //清零计数变量
+        COUNT=~COUNT;
+        TL1 = 0x00; //重置定时器初值
+        TH1 = 0x00;
+		 send_str("timer_interrupt_count_10\r\n"); // 通过串口输出计数值
+    }}
+}
+
+
+void button_isr(void) interrupt 2
+{
+    //delay_ms(200); // 延时消抖
+    if(FZ == 0) // 检测是否按下按钮
+    {
+        cnt++; // 按钮计数器加1
+        if(cnt == 10) // 当计数值达到10时
+        {
+            cnt = 0; // 重新计数
+            send_str("ext_interrupt_count_10\r\n"); // 通过串口输出计数值
+        }
+    }
+}
+
+
+
+void Uart_server() interrupt 4
+{
+    if(RI) {
+        RI = 0;
+        if(SBUF == 'o') {
+            while(!RI);
+            RI = 0;
+            if(SBUF == 'p') {
+                led1 = 0;
+                send_str("open_ok\r\n");
+            }
+        } else if(SBUF == 'c') {
+            while(!RI);
+            RI = 0;
+            if(SBUF == 'l') {
+                while(!RI);
+                RI = 0;
+                if(SBUF == 'o') {
+                    while(!RI);
+                    RI = 0;
+                    if(SBUF == 's') {
+                        while(!RI);
+                        RI = 0;
+                        if(SBUF == 'e') {
+                            led1 = 1;
+                            send_str("close_ok\r\n");
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
